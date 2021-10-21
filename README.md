@@ -2,9 +2,11 @@
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/codedthemes/berry-free-react-admin-template/blob/main/LICENSE)
 [![GitHub package version](https://img.shields.io/github/package-json/v/codedthemes/berry-free-react-admin-template)](https://github.com/codedthemes/berry-free-react-admin-template/)
 
-#Update last project: git checkout main -> git pull -> git checkout <yourbrand> -> git merge main ==>code 
-#Push your code: git add . -> git commit -m "abc" -> git push
-#Front end:
+# Update last project:
+	git checkout main -> git pull -> git checkout <yourbrand> -> git merge main ==>code 
+# Push your code:
+	git add . -> git commit -m "abc" -> git push
+# Front end:
 	
 Cài Vscode
 	
@@ -16,7 +18,7 @@ chạy lệnh npm start
 	
 check link: http://localhost:3000
 
-#Back end:
+# Back end:
        1. Cài Docker Desktop, MSSQL
 
        2. mở docker desktop, đồng thời mở thư mục project, gõ lệnh docker-compose -f docker-compose.amd.yaml pull (ở thư mục project)
