@@ -1,13 +1,15 @@
 version: '3.4'
 services:
   mssql:
-    image: 'mcr.microsoft.com/mssql/server:2017-CU20-ubuntu-16.04'
+    image: 'mcr.microsoft.com/azure-sql-edge'
     ports:
       - '7900:1433'
     container_name: mssql
     environment:
-      SA_PASSWORD: 'Sup3rS3cr3t'
+      MSSQL_SA_PASSWORD: 'Sup3rS3cr3t'
       ACCEPT_EULA: 'Y'
+      MSSQL_PID: 'Developer'
+      MSSQL_USER: 'sa'
     volumes:
       - 'mssql:/var/opt/mssql'
     networks:
