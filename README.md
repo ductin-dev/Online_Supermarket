@@ -1,8 +1,34 @@
-# Berry Free React Material Admin Template [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20Berry%20React%20-%20The%20most%20beautiful%20Material%20designed%20Admin%20Dashboard%20Template%20&url=https://berrydashboard.io&via=codedthemes&hashtags=reactjs,webdev,developers,javascript)
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Price](https://img.shields.io/badge/price-FREE-0098f7.svg)](https://github.com/codedthemes/berry-free-react-admin-template/blob/main/LICENSE)
 [![GitHub package version](https://img.shields.io/github/package-json/v/codedthemes/berry-free-react-admin-template)](https://github.com/codedthemes/berry-free-react-admin-template/)
+
+#Update last project: git checkout main -> git pull -> git checkout <yourbrand> -> git merge main ==>code 
+#Push your code: git add . -> git commit -m "abc" -> git push
+#Front end:
+	
+Cài Vscode
+	
+mở project bằng vscode, chọn terminal của vscode
+	
+chạy lệnh npm i
+	
+chạy lệnh npm start
+	
+check link: http://localhost:3000
+
+#Back end:
+       1. Cài Docker Desktop, MSSQL
+
+       2. mở docker desktop, đồng thời mở thư mục project, gõ lệnh docker-compose -f docker-compose.amd.yaml pull (ở thư mục project)
+
+
+
+       3. Gõ tiếp docker-compose -f docker-compose.amd.yaml up -d --force-recreate
+
+       4. Vào http://localhost:8080/swagger/index.html, chọn 1 enpoint bất kỳ -> try it out (để sinh db scheme)
+ 
+ 
+
 
 
 Berry is a creative free react admin template build using the Material-UI. It is meant to be the best User Experience with highly customizable feature-riched pages. It is a complete game-changer React Dashboard Template with easy and intuitive responsive design as on retina screens or laptopshttps://berrydashboard.io/imp-images/berry-github-free-repo.jpg
