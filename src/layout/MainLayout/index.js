@@ -10,13 +10,13 @@ import { AppBar, CssBaseline, Toolbar, useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 
 // project imports
-import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
+import Breadcrumbs from '../../ui-component/extended/Breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Customization from '../Customization';
-import navigation from 'menu-items';
-import { drawerWidth } from 'store/constant';
-import { SET_MENU } from 'store/actions';
+import navigation from '../../menu-items';
+import { drawerWidth } from '../../store/constant';
+import { SET_MENU } from '../../store/actions';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';

@@ -1,33 +1,36 @@
 // assets
-import { IconBrandChrome, IconHelp, IconSitemap } from '@tabler/icons';
+import { IconBrandChrome, IconHelp, IconSitemap, IconExternalLink, IconInfoCircle } from '@tabler/icons';
 
 // constant
 const icons = {
     IconBrandChrome,
     IconHelp,
-    IconSitemap
+    IconSitemap,
+    IconExternalLink,
+    IconInfoCircle
 };
 
 // ===========================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||=========================== //
 
 const other = {
     id: 'sample-docs-roadmap',
+    title: 'Khác',
     type: 'group',
     children: [
         {
-            id: 'sample-page',
-            title: 'Sample Page',
+            id: 'about',
+            title: 'Giới thiệu',
             type: 'item',
-            url: '/sample-page',
-            icon: icons.IconBrandChrome,
+            url: '/about',
+            icon: icons.IconInfoCircle,
             breadcrumbs: false
         },
         {
             id: 'documentation',
-            title: 'Documentation',
+            title: 'External Blogs',
             type: 'item',
-            url: 'https://codedthemes.gitbook.io/berry/',
-            icon: icons.IconHelp,
+            url: 'https://www.satdevelop.com',
+            icon: icons.IconExternalLink,
             external: true,
             target: true
         }

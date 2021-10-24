@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Button, Card, CardContent, Grid, Link, Stack, Typography } from '@material-ui/core';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 
 // style constant
 const useStyles = makeStyles((theme) => ({
@@ -63,11 +63,11 @@ const UpgradePlanCard = () => {
             <CardContent>
                 <Grid container direction="column" spacing={2}>
                     <Grid item>
-                        <Typography variant="h4">Upgrade to Pro</Typography>
+                        <Typography variant="h4">Mở một session khác</Typography>
                     </Grid>
                     <Grid item>
                         <Typography variant="subtitle2" className={classes.tagLine}>
-                            For more premium pages & features
+                            Vì tôi nhát làm đăng nhập, nên ấn nút này để mở một user khác
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -80,7 +80,7 @@ const UpgradePlanCard = () => {
                                     variant="contained"
                                     className={classes.button}
                                 >
-                                    Go Premium
+                                    Mở Session Mới
                                 </Button>
                             </AnimateButton>
                         </Stack>

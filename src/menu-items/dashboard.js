@@ -1,25 +1,45 @@
 // assets
-import { IconDashboard, IconDeviceAnalytics } from '@tabler/icons';
+import { IconDashboard, IconDeviceAnalytics, IconUserCheck, IconInfoCircle, IconShoppingCart } from '@tabler/icons';
 
 // constant
 const icons = {
     IconDashboard,
-    IconDeviceAnalytics
+    IconDeviceAnalytics,
+    IconUserCheck,
+    IconInfoCircle,
+    IconShoppingCart
 };
 
 // ===========================|| DASHBOARD MENU ITEMS ||=========================== //
 
 const dashboard = {
     id: 'dashboard',
-    title: 'Dashboard',
+    title: 'Điều hướng',
+    caption: 'Chọn tính năng',
     type: 'group',
     children: [
         {
             id: 'default',
-            title: 'Dashboard',
+            title: 'Trang chủ',
             type: 'item',
-            url: '/dashboard/default',
+            url: '/',
             icon: icons.IconDashboard,
+            breadcrumbs: false
+        },
+        {
+            id: 'cart',
+            title: 'Giỏ hàng',
+            type: 'item',
+            url: '/cart',
+            icon: icons.IconShoppingCart,
+            breadcrumbs: false
+        },
+        {
+            id: 'profile',
+            title: 'My Profile',
+            type: 'item',
+            url: '/profile',
+            icon: icons.IconUserCheck,
             breadcrumbs: false
         }
     ]

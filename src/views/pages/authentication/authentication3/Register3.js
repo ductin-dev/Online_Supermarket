@@ -8,9 +8,9 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@material-ui/co
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'ui-component/Logo';
+import Logo from '../../../../ui-component/Logo';
 import FirebaseRegister from '../firebase-forms/FirebaseRegister';
-import AuthFooter from 'ui-component/cards/AuthFooter';
+import AuthFooter from '../../../../ui-component/cards/AuthFooter';
 
 // assets
 

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Skeleton } from '@material-ui/core';
 
 // project imports
-import { gridSpacing } from 'store/constant';
+import { gridSpacing } from '../../../store/constant';
 
 // style constant
 const useStyles = makeStyles({

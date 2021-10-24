@@ -1,7 +1,7 @@
 import { createTheme } from '@material-ui/core/styles';
 
 // assets
-import colors from 'assets/scss/_themes-vars.module.scss';
+import colors from '../assets/scss/_themes-vars.module.scss';
 
 // project imports
 import componentStyleOverrides from './compStyleOverride';

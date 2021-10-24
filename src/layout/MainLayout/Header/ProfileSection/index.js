@@ -27,13 +27,13 @@ import ListItemButton from '@material-ui/core/ListItemButton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import Transitions from 'ui-component/extended/Transitions';
+import MainCard from '../../../../ui-component/cards/MainCard';
+import Transitions from '../../../../ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
 
 // assets
 import { IconLogout, IconSearch, IconSettings } from '@tabler/icons';
-import User1 from 'assets/images/users/user-round.svg';
+import User1 from '../../../../assets/images/users/user-round.svg';
 
 // style const
 const useStyles = makeStyles((theme) => ({

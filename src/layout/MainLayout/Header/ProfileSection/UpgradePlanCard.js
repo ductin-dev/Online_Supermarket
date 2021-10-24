@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Button, Card, CardContent, Grid, Stack, Typography } from '@material-ui/core';
 
 // project imports
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import AnimateButton from '../../../../ui-component/extended/AnimateButton';
 
 // style constant
 const useStyles = makeStyles((theme) => ({
