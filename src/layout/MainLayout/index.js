@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-// material-ui
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { AppBar, CssBaseline, Toolbar, useMediaQuery } from '@material-ui/core';
-
-// third-party
 import clsx from 'clsx';
+import { message } from 'antd';
 
-// project imports
 import Breadcrumbs from '../../ui-component/extended/Breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -17,8 +15,9 @@ import Customization from '../Customization';
 import navigation from '../../menu-items';
 import { drawerWidth } from '../../store/constant';
 import { SET_MENU } from '../../store/actions';
+import { SET_CUSTOMER } from '../../store/actions';
+import { loginCusHandler, logoutCusHandler } from '../../services/Customer/getCustomer';
 
-// assets
 import { IconChevronRight } from '@tabler/icons';
 
 // style constant
@@ -77,9 +76,27 @@ const useStyles = makeStyles((theme) => ({
 // ===========================|| MAIN LAYOUT ||=========================== //
 
 const MainLayout = () => {
+    const history = useNavigate();
     const classes = useStyles();
     const theme = useTheme();
     const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
+    const customization = useSelector((state) => state.customization);
+
+    //Current customer
+    useEffect(() => {
+        if (customization.currentCustomer.name === null) {
+            if (localStorage.getItem('jwtFake') !== null) {
+                loginCusHandler(localStorage.getItem('jwtFake'), (res) => {
+                    dispatch({ type: SET_CUSTOMER, currentCustomer: res });
+                });
+            } else {
+                if (window.location.pathname !== '/') {
+                    message.warning('Chưa đăng nhập');
+                    history('/');
+                }
+            }
+        }
+    }, []);
 
     // Handle left drawer
     const leftDrawerOpened = useSelector((state) => state.customization.opened);
@@ -103,6 +120,7 @@ const MainLayout = () => {
                 color="inherit"
                 elevation={0}
                 className={leftDrawerOpened ? classes.appBarWidth : classes.appBar}
+                style={{ zIndex: 10 }}
             >
                 <Toolbar>
                     <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />

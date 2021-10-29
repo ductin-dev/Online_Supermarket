@@ -27,18 +27,18 @@ const dashboard = {
             breadcrumbs: false
         },
         {
-            id: 'cart',
+            id: 'carts',
             title: 'Giỏ hàng',
             type: 'item',
-            url: '/cart',
+            url: '/carts',
             icon: icons.IconShoppingCart,
             breadcrumbs: false
         },
         {
-            id: 'profile',
+            id: 'myprofile',
             title: 'My Profile',
             type: 'item',
-            url: '/profile',
+            url: '/myprofile',
             icon: icons.IconUserCheck,
             breadcrumbs: false
         }

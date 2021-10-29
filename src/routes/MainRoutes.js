@@ -33,10 +33,6 @@ const MainRoutes = {
             element: <Home />
         },
         {
-            path: '/cart',
-            element: <Cart />
-        },
-        {
             path: '/profile',
             element: <Profile />
         },
@@ -45,12 +41,28 @@ const MainRoutes = {
             element: <About />
         },
         {
-            path: '/shop',
+            path: '/shop/:shopId',
             element: <Shop />
         },
         {
-            path: '/item',
+            path: '/item/:itemId',
             element: <Item />
+        },
+        {
+            path: '/carts',
+            element: <Cart />
+        },
+        {
+            path: '/cart/:cartId',
+            element: <Cart />
+        },
+        {
+            path: '/order/:orderId',
+            element: <Cart />
+        },
+        {
+            path: '/myprofile',
+            element: <Profile />
         },
         //====================
         {

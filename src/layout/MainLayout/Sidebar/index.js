@@ -80,7 +80,7 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <nav className={classes.drawer} aria-label="mailbox folders">
+        <nav className={classes.drawer} aria-label="mailbox folders" style={{ zIndex: 10 }}>
             <Drawer
                 container={container}
                 variant={matchUpMd ? 'persistent' : 'temporary'}

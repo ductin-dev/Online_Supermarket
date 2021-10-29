@@ -1,72 +1,90 @@
-import DataTable, { createTheme } from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
+import { Button, Avatar } from 'antd';
+import { addItem, deleteItem, editItem } from '../../views/formpopup/Item';
+import { EditFilled, DeleteFilled, EyeFilled, UpCircleFilled } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { activeItemHandler } from '../../services/Item/activeItem';
 
-//Table Theme
-createTheme('solarized', {
-    text: {
-        primary: '#268bd2',
-        secondary: '#2aa198'
-    },
-    background: {
-        default: 'none'
-    },
-    context: {
-        background: 'none',
-        text: '#FFFFFF'
-    },
-    divider: {
-        default: '#073642'
-    },
-    action: {
-        button: 'rgba(0,0,0,.54)',
-        hover: 'rgba(0,0,0,.08)',
-        disabled: 'rgba(0,0,0,.12)'
-    }
-});
+const ItemList = (props: any) => {
+    const history = useNavigate();
 
-//Table column structure
-const columns = [
-    {
-        name: 'Title',
-        sortable: false,
-        cell: (row: any) => (
-            <span style={{ fontWeight: 800 }}>
-                {row.Title}
-                <br></br>
-                <span style={{ fontWeight: 200 }}>with Worker:{row.CWork}</span>
-            </span>
-        )
-    },
-    {
-        name: 'Image',
-        sortable: false,
-        cell: (row: any) => <img src={row.ImgBase64} alt="X" style={{ height: 100, width: 200, objectFit: 'cover' }}></img>
-    },
-    {
-        name: 'Type',
-        cell: (row: any) => <div>{row.Type}</div>
-    }
-];
-const ItemList = () => (
-    <DataTable
-        title={
-            <span>
-                <hr></hr>
-                Demo data
-                <button
-                    style={{ fontSize: 12 }}
-                    className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-1 py-1 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                    onClick={() => {}}
-                >
-                    Clear All Data
-                </button>
-            </span>
+    //Table column structure
+    const columns = [
+        {
+            name: 'Id',
+            sortable: false,
+            cell: (row: any) => (
+                <span>
+                    {row.itemId}{' '}
+                    {!row.isActive && (
+                        <>
+                            <br></br>
+                            <p style={{ color: 'gray', fontSize: 11 }}>(inactive)</p>
+                        </>
+                    )}
+                </span>
+            )
+        },
+        {
+            name: 'Name',
+            sortable: false,
+            cell: (row: any) => <span style={{ fontWeight: 800 }}>{row.name}</span>
+        },
+        {
+            name: 'Image',
+            sortable: false,
+            cell: (row: any) => <Avatar src={'data:image/png;base64,' + row.image} shape="square" size={32} />
+        },
+        {
+            name: 'Price',
+            cell: (row: any) => <div>{row.price}</div>
+        },
+        {
+            name: 'Thao tác',
+            cell: (row: any) =>
+                row.isActive ? (
+                    <div>
+                        <Button type="primary" icon={<EyeFilled />} style={{ margin: 2 }} onClick={() => history('/item/' + row.itemId)} />
+                        <Button type="primary" icon={<EditFilled />} style={{ margin: 2 }} onClick={() => editItem(props.shopId, row)} />
+                        <Button
+                            type="primary"
+                            icon={<DeleteFilled />}
+                            style={{ margin: 2, border: 'none', backgroundColor: 'red' }}
+                            onClick={() => deleteItem(props.shopId, row.itemId)}
+                        />
+                    </div>
+                ) : (
+                    <Button
+                        type="primary"
+                        icon={<UpCircleFilled />}
+                        style={{ margin: 2, border: 'none', backgroundColor: 'darkorange' }}
+                        onClick={() => activeItemHandler(props.shopId, row.itemId)}
+                    />
+                )
         }
-        columns={columns}
-        data={['abc']}
-        pagination={true}
-        paginationPerPage={5}
-        paginationRowsPerPageOptions={[5, 10, 30, 100]}
-    />
-);
+    ];
 
+    //RENDER
+    return (
+        <DataTable
+            title={
+                <span>
+                    Danh sách mặt hàng
+                    <Button
+                        type="primary"
+                        style={{ float: 'right', backgroundColor: 'forestgreen', border: 'none' }}
+                        onClick={() => addItem(props.shopId)}
+                    >
+                        + Thêm mặt hàng
+                    </Button>
+                </span>
+            }
+            columns={columns}
+            data={props.items}
+            pagination={true}
+            paginationPerPage={5}
+            paginationRowsPerPageOptions={[5, 10, 30, 100]}
+        />
+    );
+};
 export default ItemList;

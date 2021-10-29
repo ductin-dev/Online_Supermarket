@@ -1,22 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-// material-ui
 import { Typography } from '@material-ui/core';
+import { Form, Input, message, Button, Space } from 'antd';
+import { EditFilled, DeleteFilled, EyeFilled, UpCircleFilled } from '@ant-design/icons';
 
-// project imports
 import MainCard from '../../ui-component/cards/MainCard';
+import CartList from '../../ui-component/table/CartList';
 
 //= =============================|| SAMPLE PAGE ||==============================//
 
-const SamplePage = () => (
-    <MainCard title="Sample Card">
-        <Typography variant="body2">
-            Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif
-            ad minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
-            reprehended in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa
-            qui officiate descent molls anim id est labours.
-        </Typography>
-    </MainCard>
-);
+const Cart = () => {
+    const history = useNavigate();
+    const dispatch = useDispatch();
+    const customization = useSelector((state) => state.customization);
 
-export default SamplePage;
+    //CURRENT CUSTOMER
+    useEffect(() => {
+        if (customization.currentCustomer.name === null) {
+            message.warning('Chưa đăng nhập');
+            history('/');
+        }
+    }, []);
+
+    return (
+        <MainCard title="Chọn shop <dropdown/>">
+            <Typography variant="body2">
+                <CartList />
+            </Typography>
+        </MainCard>
+    );
+};
+
+export default Cart;

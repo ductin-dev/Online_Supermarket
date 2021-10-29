@@ -1,22 +1,95 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-// material-ui
-import { Typography } from '@material-ui/core';
-
-// project imports
 import MainCard from '../../ui-component/cards/MainCard';
+import OrderList from '../../ui-component/table/OrderList';
+import { editCustomer } from '../formpopup/Customer';
+import { Avatar, Button, message } from 'antd';
+import { EditFilled, UserSwitchOutlined } from '@ant-design/icons';
+import { SET_CUSTOMER } from '../../store/actions';
+import { loginCusHandler, logoutCusHandler } from '../../services/Customer/getCustomer';
+import { getAllOrderByCustomerHandler } from '../../services/Order/getOrder';
 
-//= =============================|| SAMPLE PAGE ||==============================//
+const Profile = () => {
+    const history = useNavigate();
+    const dispatch = useDispatch();
+    const customization = useSelector((state) => state.customization);
 
-const SamplePage = () => (
-    <MainCard title="Sample Card">
-        <Typography variant="body2">
-            Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif
-            ad minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
-            reprehended in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa
-            qui officiate descent molls anim id est labours.
-        </Typography>
-    </MainCard>
-);
+    //CURRENT CUSTOMER
+    const [user, setUser] = useState({
+        customerId: customization.currentCustomer.customerId,
+        name: customization.currentCustomer.name,
+        phoneNumber: customization.currentCustomer.phoneNumber,
+        avatar: customization.currentCustomer.avatar
+    });
+    useEffect(() => {
+        if (customization.currentCustomer.name === null) {
+            if (localStorage.getItem('jwtFake') !== null) {
+                loginCusHandler(localStorage.getItem('jwtFake'), (res) => {
+                    dispatch({ type: SET_CUSTOMER, currentCustomer: res });
+                });
+            } else {
+                message.warning('Chưa đăng nhập');
+                history('/');
+            }
+        }
+    }, []);
+    useEffect(
+        () => {
+            setUser({
+                customerId: customization.currentCustomer.customerId,
+                name: customization.currentCustomer.name,
+                phoneNumber: customization.currentCustomer.phoneNumber,
+                avatar: customization.currentCustomer.avatar
+            });
+        },
+        [customization],
+        dispatch
+    );
 
-export default SamplePage;
+    //ORDER LIST
+    const [orders, setOrders] = useState([]);
+    useEffect(() => {
+        getAllOrderByCustomerHandler(user.customerId, (res) => {
+            setOrders(res.orders);
+        });
+    }, [user.customerId]);
+
+    return (
+        <MainCard
+            title={
+                <>
+                    <span style={{ float: 'left' }}>
+                        <Avatar src={'data:image/png;base64,' + user.avatar} shape="square" size={64} />
+                        &nbsp;{user.name}&nbsp;&nbsp;
+                        <Button
+                            type="primary"
+                            icon={<UserSwitchOutlined />}
+                            style={{ fontSize: 12, padding: '2px 15px 2px 15px', border: 'none', backgroundColor: 'red', borderRadius: 8 }}
+                            onClick={() => {
+                                logoutCusHandler();
+                                message.success('Đã đăng xuất');
+                                window.location.href = '/';
+                            }}
+                        >
+                            Đăng xuất
+                        </Button>
+                    </span>
+                    <span style={{ float: 'right', textAlign: 'center' }}>
+                        <span style={{ fontWeight: 200, fontSize: 12 }}>SĐT: </span>
+                        {user.phoneNumber}
+                        <br></br>
+                        <Button type="primary" icon={<EditFilled />} style={{ margin: 2 }} onClick={() => editCustomer(user)}>
+                            Chỉnh sửa
+                        </Button>
+                    </span>
+                </>
+            }
+        >
+            <OrderList orders={orders} />
+        </MainCard>
+    );
+};
+
+export default Profile;
