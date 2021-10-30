@@ -117,7 +117,7 @@ const FormEdit = (props: any) => {
             form={formEdit}
             layout="vertical"
             onFinish={() => {
-                editCusHandler(props.cus.customerId, state.Name, state.Phone, state.Avatar);
+                editCusHandler(props.cus.customerId, state.Name, state.Phone, state.Avatar, props.callbackSync);
                 MySwal.close();
             }}
             autoComplete="off"
@@ -216,7 +216,7 @@ export const addCustomer = () => {
     });
 };
 
-export const editCustomer = (cus: any) => {
+export const editCustomer = (cus: any, callbackSync: () => void) => {
     MySwal.fire({
         title: (
             <h5 style={{ color: 'forestgreen' }}>
@@ -224,7 +224,7 @@ export const editCustomer = (cus: any) => {
                 &nbsp;Chỉnh sửa thông tin user <span style={{ color: 'violet' }}>{cus.name}</span>
             </h5>
         ),
-        html: <FormEdit cus={cus} />,
+        html: <FormEdit cus={cus} callbackSync={callbackSync} />,
         showCloseButton: false,
         showConfirmButton: false
     });

@@ -2,7 +2,7 @@ import { CREATE_ITEM } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
 
-export const addItemHandler = (shopId: string, name: string, price: string, image: any) => {
+export const addItemHandler = (shopId: string, name: string, price: string, image: any, callbackSync: () => void) => {
     let formData = new FormData();
 
     formData.append('ShopId', shopId);
@@ -18,6 +18,7 @@ export const addItemHandler = (shopId: string, name: string, price: string, imag
             data: formData
         })
         .then((res: any) => {
+            callbackSync();
             message.success('Đã thêm');
         })
         .catch((err) => {

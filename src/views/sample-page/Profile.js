@@ -17,6 +17,7 @@ const Profile = () => {
     const customization = useSelector((state) => state.customization);
 
     //CURRENT CUSTOMER
+    const [syncUser, setSyncUser] = useState(false);
     const [user, setUser] = useState({
         customerId: customization.currentCustomer.customerId,
         name: customization.currentCustomer.name,
@@ -25,16 +26,17 @@ const Profile = () => {
     });
     useEffect(() => {
         if (customization.currentCustomer.name === null) {
-            if (localStorage.getItem('jwtFake') !== null) {
-                loginCusHandler(localStorage.getItem('jwtFake'), (res) => {
-                    dispatch({ type: SET_CUSTOMER, currentCustomer: res });
-                });
-            } else {
+            if (localStorage.getItem('jwtFake') === null) {
                 message.warning('Chưa đăng nhập');
                 history('/');
             }
         }
     }, []);
+    useEffect(() => {
+        loginCusHandler(localStorage.getItem('jwtFake'), (res) => {
+            dispatch({ type: SET_CUSTOMER, currentCustomer: res });
+        });
+    }, [syncUser]);
     useEffect(
         () => {
             setUser({
@@ -80,7 +82,16 @@ const Profile = () => {
                         <span style={{ fontWeight: 200, fontSize: 12 }}>SĐT: </span>
                         {user.phoneNumber}
                         <br></br>
-                        <Button type="primary" icon={<EditFilled />} style={{ margin: 2 }} onClick={() => editCustomer(user)}>
+                        <Button
+                            type="primary"
+                            icon={<EditFilled />}
+                            style={{ margin: 2 }}
+                            onClick={() =>
+                                editCustomer(user, () => {
+                                    setSyncUser(!syncUser);
+                                })
+                            }
+                        >
                             Chỉnh sửa
                         </Button>
                     </span>

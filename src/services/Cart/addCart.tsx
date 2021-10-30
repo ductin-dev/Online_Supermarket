@@ -1,23 +1,25 @@
 import { CREATE_CART } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
+import { loginShopHandler } from '../Shop/getShop';
 
-export const addCartHandler = (cusId: string, shpId: string, callback: (res: any) => void) => {
-    axios
-        .post(CREATE_CART, {
-            headers: {
-                'Content-type': 'application/json'
-            },
-            data: {
+export const addCartHandler = (cusId: string, shpPhone: string, callback: (res: any) => void) => {
+    loginShopHandler(shpPhone, (res) => {
+        axios
+            .post(CREATE_CART, {
                 customerId: cusId,
-                shopId: shpId
-            }
-        })
-        .then((res: any) => {
-            message.success('Đã thêm giỏ hàng mới');
-            callback(res.data);
-        })
-        .catch((err) => {
-            message.warning('Đã lỗi');
-        });
+                shopId: res.shopId
+            })
+            .then((res: any) => {
+                if (!res.data.isSuccess) {
+                    message.warning(res.data.errorMessage);
+                } else {
+                    message.success('Đã thêm giỏ hàng mới');
+                    callback(res.data);
+                }
+            })
+            .catch((err) => {
+                message.warning('Đã lỗi');
+            });
+    });
 };

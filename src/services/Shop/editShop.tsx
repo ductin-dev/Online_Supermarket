@@ -2,7 +2,7 @@ import { UPDATE_SHOP } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
 
-export const editShopHandler = (name: string, phone: string, newPhone: string, logo: any) => {
+export const editShopHandler = (name: string, phone: string, newPhone: string, logo: any, callbackSync: () => void) => {
     let formData = new FormData();
 
     formData.append('Name', name);
@@ -21,6 +21,7 @@ export const editShopHandler = (name: string, phone: string, newPhone: string, l
             data: formData
         })
         .then((res: any) => {
+            callbackSync();
             message.success('Đã cập nhật');
         })
         .catch((err) => {

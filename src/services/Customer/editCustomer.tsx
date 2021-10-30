@@ -2,7 +2,7 @@ import { UPDATE_CUSTOMER } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
 
-export const editCusHandler = (cusId: string, name: string, phone: string, avatar: any) => {
+export const editCusHandler = (cusId: string, name: string, phone: string, avatar: any, callbackSync: () => void) => {
     let formData = new FormData();
     formData.append('CustomerId', cusId);
     formData.append('Name', name);
@@ -19,6 +19,7 @@ export const editCusHandler = (cusId: string, name: string, phone: string, avata
         .then((res: any) => {
             if (res.data.isSuccess) {
                 localStorage.setItem('jwtFake', phone);
+                callbackSync();
                 message.success('Đã cập nhật');
             }
         })

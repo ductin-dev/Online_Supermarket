@@ -16,12 +16,11 @@ const UtilsMaterialIcons = Loadable(lazy(() => import('../views/utilities/Materi
 const UtilsTablerIcons = Loadable(lazy(() => import('../views/utilities/TablerIcons')));
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('../views/sample-page/Má Nó Rác')));
 const About = Loadable(lazy(() => import('../views/sample-page/About')));
 const Shop = Loadable(lazy(() => import('../views/sample-page/Shop')));
 const Profile = Loadable(lazy(() => import('../views/sample-page/Profile')));
+const Carts = Loadable(lazy(() => import('../views/sample-page/Carts')));
 const Cart = Loadable(lazy(() => import('../views/sample-page/Cart')));
-const Item = Loadable(lazy(() => import('../views/sample-page/Item')));
 // ===========================|| MAIN ROUTING ||=========================== //
 
 const MainRoutes = {
@@ -33,10 +32,6 @@ const MainRoutes = {
             element: <Home />
         },
         {
-            path: '/profile',
-            element: <Profile />
-        },
-        {
             path: '/about',
             element: <About />
         },
@@ -45,15 +40,11 @@ const MainRoutes = {
             element: <Shop />
         },
         {
-            path: '/item/:itemId',
-            element: <Item />
-        },
-        {
             path: '/carts',
-            element: <Cart />
+            element: <Carts />
         },
         {
-            path: '/cart/:cartId',
+            path: '/carts/:cartId',
             element: <Cart />
         },
         {
@@ -92,11 +83,6 @@ const MainRoutes = {
         {
             path: '/icons/material-icons',
             element: <UtilsMaterialIcons />
-        },
-
-        {
-            path: '/sample-page',
-            element: <SamplePage />
         }
     ]
 };

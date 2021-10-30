@@ -2,7 +2,7 @@ import { CANCEL_ORDER, UPDATE_STATUS_ORDER } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
 
-export const cancelOrderHandler = (ordId: string, cusId: string) => {
+export const cancelOrderHandler = (ordId: string, cusId: string, callback: (res: any) => void) => {
     axios
         .put(CANCEL_ORDER, {
             headers: {
@@ -14,6 +14,7 @@ export const cancelOrderHandler = (ordId: string, cusId: string) => {
             }
         })
         .then((res: any) => {
+            callback(res.data);
             message.success('Đã huỷ đơn hàng');
         })
         .catch((err) => {
@@ -21,7 +22,7 @@ export const cancelOrderHandler = (ordId: string, cusId: string) => {
         });
 };
 
-export const updateStatusOrderHandler = (ordId: string, status: string, cusId: string, shpId: string) => {
+export const updateStatusOrderHandler = (ordId: string, status: string, cusId: string, shpId: string, callback: (res: any) => void) => {
     axios
         .put(UPDATE_STATUS_ORDER, {
             headers: {
@@ -35,6 +36,7 @@ export const updateStatusOrderHandler = (ordId: string, status: string, cusId: s
             }
         })
         .then((res: any) => {
+            callback(res.data);
             message.success('Đã cập nhật đơn hàng');
         })
         .catch((err) => {

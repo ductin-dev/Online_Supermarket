@@ -2,19 +2,19 @@ import { CREATE_ORDER } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
 
-export const addOrderHandler = (cusId: string, delInfor: string) => {
+export const addOrderHandler = (crtId: string, delInfor: string, callBackSync: (res: any) => void) => {
     axios
         .post(CREATE_ORDER, {
-            headers: {
-                'Content-type': 'application/json'
-            },
-            data: {
-                cartId: cusId,
-                deliveryInformation: delInfor
-            }
+            cartId: crtId,
+            deliveryInformation: delInfor
         })
         .then((res: any) => {
-            message.success('Đã thêm');
+            if (!res.data.isSuccess) {
+                message.warning(res.data.errorMessage);
+            } else {
+                message.success('Đã ghi nhận 1 order mới');
+                callBackSync(res.data);
+            }
         })
         .catch((err) => {
             message.warning('Đã lỗi');

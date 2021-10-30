@@ -1,12 +1,14 @@
 import DataTable from 'react-data-table-component';
 import { Button, Avatar } from 'antd';
-import { addItem, deleteItem, editItem } from '../../views/formpopup/Item';
-import { EditFilled, DeleteFilled, EyeFilled, UpCircleFilled } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import { addItem, deleteItem, editItem, viewItemImage } from '../../views/formpopup/Item';
+import { PlusCircleOutlined, EditFilled, MinusCircleOutlined, DeleteFilled, EyeFilled, UpCircleFilled } from '@ant-design/icons';
 import { activeItemHandler } from '../../services/Item/activeItem';
+import { addItemToCart } from '../../services/Cart/editCart';
 
 const ItemList = (props: any) => {
-    const history = useNavigate();
+    const customization = useSelector((state: any) => state.customization);
 
     //Table column structure
     const columns = [
@@ -33,33 +35,57 @@ const ItemList = (props: any) => {
         {
             name: 'Image',
             sortable: false,
-            cell: (row: any) => <Avatar src={'data:image/png;base64,' + row.image} shape="square" size={32} />
+            cell: (row: any) => (
+                <div onClick={() => viewItemImage(row.image)}>
+                    <Avatar src={'data:image/png;base64,' + row.image} shape="square" size={32} />
+                </div>
+            )
         },
         {
             name: 'Price',
             cell: (row: any) => <div>{row.price}</div>
         },
         {
-            name: 'Thao tác',
+            name: 'Thêm ->',
             cell: (row: any) =>
                 row.isActive ? (
                     <div>
-                        <Button type="primary" icon={<EyeFilled />} style={{ margin: 2 }} onClick={() => history('/item/' + row.itemId)} />
-                        <Button type="primary" icon={<EditFilled />} style={{ margin: 2 }} onClick={() => editItem(props.shopId, row)} />
-                        <Button
-                            type="primary"
-                            icon={<DeleteFilled />}
-                            style={{ margin: 2, border: 'none', backgroundColor: 'red' }}
-                            onClick={() => deleteItem(props.shopId, row.itemId)}
-                        />
+                        {props.ordering ? (
+                            <Button
+                                type="default"
+                                icon={<PlusCircleOutlined />}
+                                style={{ margin: 2, display: 'inline-block' }}
+                                onClick={() =>
+                                    addItemToCart(row.itemId, customization.currentCustomer.customerId, props.cartId, props.callBackSync)
+                                }
+                            />
+                        ) : (
+                            <>
+                                <Button type="primary" icon={<EyeFilled />} style={{ margin: 2 }} />
+                                <Button
+                                    type="primary"
+                                    icon={<EditFilled />}
+                                    style={{ margin: 2 }}
+                                    onClick={() => editItem(props.shopId, row, props.callbackSync)}
+                                />
+                                <Button
+                                    type="primary"
+                                    icon={<DeleteFilled />}
+                                    style={{ margin: 2, border: 'none', backgroundColor: 'red' }}
+                                    onClick={() => deleteItem(props.shopId, row.itemId, props.callbackSync)}
+                                />
+                            </>
+                        )}
                     </div>
                 ) : (
-                    <Button
-                        type="primary"
-                        icon={<UpCircleFilled />}
-                        style={{ margin: 2, border: 'none', backgroundColor: 'darkorange' }}
-                        onClick={() => activeItemHandler(props.shopId, row.itemId)}
-                    />
+                    !props.ordering && (
+                        <Button
+                            type="primary"
+                            icon={<UpCircleFilled />}
+                            style={{ margin: 2, border: 'none', backgroundColor: 'darkorange' }}
+                            onClick={() => activeItemHandler(props.shopId, row.itemId, props.callbackSync)}
+                        />
+                    )
                 )
         }
     ];
@@ -69,18 +95,24 @@ const ItemList = (props: any) => {
         <DataTable
             title={
                 <span>
-                    Danh sách mặt hàng
-                    <Button
-                        type="primary"
-                        style={{ float: 'right', backgroundColor: 'forestgreen', border: 'none' }}
-                        onClick={() => addItem(props.shopId)}
-                    >
-                        + Thêm mặt hàng
-                    </Button>
+                    {props.ordering ? (
+                        'Chọn món hàng'
+                    ) : (
+                        <>
+                            Danh sách mặt hàng{' '}
+                            <Button
+                                type="primary"
+                                style={{ float: 'right', backgroundColor: 'forestgreen', border: 'none' }}
+                                onClick={() => addItem(props.shopId, props.callbackSync)}
+                            >
+                                + Thêm mặt hàng
+                            </Button>
+                        </>
+                    )}
                 </span>
             }
             columns={columns}
-            data={props.items}
+            data={props.ordering ? props.items?.filter((item: any) => item.isActive === true) : props.items}
             pagination={true}
             paginationPerPage={5}
             paginationRowsPerPageOptions={[5, 10, 30, 100]}

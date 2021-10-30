@@ -28,7 +28,7 @@ const FormAdd = (props: any) => {
             form={formAdd}
             layout="vertical"
             onFinish={() => {
-                addItemHandler(props.shopId, state.Name, state.Price, state.Image);
+                addItemHandler(props.shopId, state.Name, state.Price, state.Image, props.callbackSync);
                 MySwal.close();
             }}
             autoComplete="off"
@@ -119,7 +119,7 @@ const FormEdit = (props: any) => {
             form={formEdit}
             layout="vertical"
             onFinish={() => {
-                editItemHandler(props.shopId, props.item.itemId, state.Name, state.Price, state.Image);
+                editItemHandler(props.shopId, props.item.itemId, state.Name, state.Price, state.Image, props.callbackSync);
                 MySwal.close();
             }}
             autoComplete="off"
@@ -192,7 +192,7 @@ const FormEdit = (props: any) => {
     );
 };
 
-export const addItem = (shopId: string) => {
+export const addItem = (shopId: string, callbackSync: () => void) => {
     MySwal.fire({
         title: (
             <h5 style={{ color: 'forestgreen' }}>
@@ -200,13 +200,13 @@ export const addItem = (shopId: string) => {
                 &nbsp;Tạo item mới
             </h5>
         ),
-        html: <FormAdd shopId={shopId} />,
+        html: <FormAdd shopId={shopId} callbackSync={callbackSync} />,
         showCloseButton: false,
         showConfirmButton: false
     });
 };
 
-export const editItem = (shopId: string, item: any) => {
+export const editItem = (shopId: string, item: any, callbackSync: () => void) => {
     MySwal.fire({
         title: (
             <h5 style={{ color: 'forestgreen' }}>
@@ -214,13 +214,13 @@ export const editItem = (shopId: string, item: any) => {
                 &nbsp;Chỉnh sửa item <span style={{ color: 'violet' }}>{item.itemId}</span>
             </h5>
         ),
-        html: <FormEdit shopId={shopId} item={item} />,
+        html: <FormEdit shopId={shopId} item={item} callbackSync={callbackSync} />,
         showCloseButton: false,
         showConfirmButton: false
     });
 };
 
-export const deleteItem = (shopId: string, itemId: string) => {
+export const deleteItem = (shopId: string, itemId: string, callbackSync: () => void) => {
     MySwal.fire({
         title: (
             <h5 style={{ color: 'red' }}>
@@ -235,6 +235,14 @@ export const deleteItem = (shopId: string, itemId: string) => {
         confirmButtonText: `Có`,
         denyButtonText: `Không`
     }).then((result) => {
-        if (result.isConfirmed) deleteItemHandler(shopId, itemId);
+        if (result.isConfirmed) deleteItemHandler(shopId, itemId, callbackSync);
+    });
+};
+
+export const viewItemImage = (image: any) => {
+    MySwal.fire({
+        html: <Avatar src={'data:image/png;base64,' + image} shape="square" size={256} />,
+        showCloseButton: false,
+        showConfirmButton: false
     });
 };

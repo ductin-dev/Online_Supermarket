@@ -4,6 +4,7 @@ const domain = 'http://localhost:8080/';
 const GET_CART = domain + 'api/Cart/';
 const CREATE_CART = domain + 'api/Cart/create';
 const ADD_ITEM_TO_CART = domain + 'api/Cart/add/item';
+const REMOVE_ITEM_FROM_CART = domain + 'api/Cart/remove/item';
 const SUBMIT_CART = domain + 'api/Cart/submit';
 const UNSUBMIT_CART = domain + 'api/Cart/unsubmit';
 const GET_CART_BY_CUSTOMER = domain + 'api/Cart/exist/shop/customer';
@@ -66,6 +67,7 @@ export {
     CANCEL_ORDER,
     UPDATE_STATUS_ORDER,
     GET_ALL_ORDER_BY_CUSTOMER,
-    GET_ALL_ORDER_BY_SHOP
+    GET_ALL_ORDER_BY_SHOP,
+    REMOVE_ITEM_FROM_CART
 };
 export { REALTIME_CART, REALTIME_ORDER, REALTIME_SHOP };

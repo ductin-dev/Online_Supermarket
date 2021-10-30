@@ -9,8 +9,6 @@ import { editShop } from '../formpopup/Shop';
 import { Avatar, message, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { EditFilled, MenuOutlined } from '@ant-design/icons';
-import { HubConnectionBuilder } from '@microsoft/signalr';
-import { REALTIME_SHOP } from '../../endpoint';
 import { getAllOrderByShopHandler } from '../../services/Order/getOrder';
 
 const Shop = () => {
@@ -20,18 +18,16 @@ const Shop = () => {
     const [isViewOrders, setIsViewOrders] = useState(false);
 
     //SHOP
-    const [sync, setSync] = useState(false);
+    const [syncShop, setSyncShop] = useState(false);
     const [shop, setShop] = useState({
         name: '',
         phone: '',
         image: '',
         items: []
     });
-
     useEffect(() => {
         getShopHandler(shopId, callbackShop);
-    }, [sync]);
-
+    }, [syncShop]);
     const callbackShop = (res) => {
         if (res.name) {
             setShop({
@@ -46,38 +42,15 @@ const Shop = () => {
         }
     };
 
-    const [connection, setConnection] = useState(null);
-    useEffect(() => {
-        const connect = new HubConnectionBuilder()
-            .withUrl(REALTIME_SHOP + shopId, { withCredentials: false })
-            .withAutomaticReconnect()
-            .build();
-        setConnection(connect);
-    }, []);
-    useEffect(() => {
-        if (connection) {
-            connection
-                .start()
-                .then(() => {
-                    connection.on('ReceiveMessage', (message) => {
-                        setSync(!sync);
-                        console.log('Re: ' + message);
-                    });
-                })
-                .catch((error) => console.log('ERROR: ' + error));
-        }
-    }, [connection]);
-
-    const sendMessage = async () => {
-        if (connection) await connection.send('SendMessage', 'Cập nhật');
-    };
-
-    //ORDER LIST
+    //ORDER + ITEM LIST
     const [orders, setOrders] = useState([]);
-    const viewOrders = () => {
+    const [syncOrders, setSyncOrders] = useState(false);
+    useEffect(() => {
         getAllOrderByShopHandler(shopId, (res) => {
             setOrders(res.orders);
         });
+    }, [syncOrders]);
+    const viewOrders = () => {
         setIsViewOrders(true);
     };
     const viewItems = () => {
@@ -103,8 +76,9 @@ const Shop = () => {
                             icon={<EditFilled />}
                             style={{ margin: 2 }}
                             onClick={() => {
-                                editShop(shop);
-                                sendMessage();
+                                editShop(shop, () => {
+                                    setSyncShop(!syncShop);
+                                });
                             }}
                         >
                             Chỉnh sửa
@@ -127,7 +101,23 @@ const Shop = () => {
                 </>
             }
         >
-            {isViewOrders ? <OrderList orders={orders} /> : <ItemList items={shop.items} shopId={shopId} />}
+            {isViewOrders ? (
+                <OrderList
+                    orders={orders}
+                    shopId={shopId}
+                    syncOrderList={() => {
+                        setSyncOrders(!syncOrders);
+                    }}
+                />
+            ) : (
+                <ItemList
+                    items={shop.items}
+                    shopId={shopId}
+                    callbackSync={() => {
+                        setSyncShop(!syncShop);
+                    }}
+                />
+            )}
         </MainCard>
     );
 };

@@ -120,7 +120,7 @@ const FormEdit = (props: any) => {
             form={formEdit}
             layout="vertical"
             onFinish={() => {
-                editShopHandler(state.Name, props.shop.phone, state.Phone, state.Logo);
+                editShopHandler(state.Name, props.shop.phone, state.Phone, state.Logo, props.callbackSync);
                 MySwal.close();
             }}
             autoComplete="off"
@@ -207,7 +207,7 @@ export const addShop = () => {
     });
 };
 
-export const editShop = (shop: any) => {
+export const editShop = (shop: any, callbackSync: () => void) => {
     MySwal.fire({
         title: (
             <h5 style={{ color: 'forestgreen' }}>
@@ -215,7 +215,7 @@ export const editShop = (shop: any) => {
                 &nbsp;Chỉnh sửa shop <span style={{ color: 'violet' }}>{shop.name}</span>
             </h5>
         ),
-        html: <FormEdit shop={shop} />,
+        html: <FormEdit shop={shop} callbackSync={callbackSync} />,
         showCloseButton: false,
         showConfirmButton: false
     });

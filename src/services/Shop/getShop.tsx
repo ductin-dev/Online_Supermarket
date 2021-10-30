@@ -30,6 +30,6 @@ export const loginShopHandler = (phone: string, callback: (res: any) => void) =>
             callback(res.data);
         })
         .catch((err) => {
-            message.warning('Đã lỗi');
+            message.warning('Không tìm thấy shop này');
         });
 };

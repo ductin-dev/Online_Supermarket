@@ -2,7 +2,7 @@ import { DELETE_ITEM } from '../../endpoint';
 import axios from 'axios';
 import { message } from 'antd';
 
-export const deleteItemHandler = (shopId: string, itemId: string) => {
+export const deleteItemHandler = (shopId: string, itemId: string, callbackSync: () => void) => {
     axios
         .delete(DELETE_ITEM, {
             headers: {
@@ -14,6 +14,7 @@ export const deleteItemHandler = (shopId: string, itemId: string) => {
             }
         })
         .then((res: any) => {
+            callbackSync();
             message.success('Đã xoá');
         })
         .catch((err) => {
