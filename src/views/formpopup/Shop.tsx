@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Form, Input, Button, Space, Upload, Avatar } from 'antd';
+import { Form, Input, Button, Space, Upload, Avatar, Descriptions, Badge, Table} from 'antd';
 import { addShopHandler } from '../../services/Shop/addShop';
 import { editShopHandler } from '../../services/Shop/editShop';
 import { deleteShopHandler } from '../../services/Shop/deleteShop';
@@ -239,3 +239,4 @@ export const deleteShop = (phone: any) => {
         if (result.isConfirmed) deleteShopHandler(phone);
     });
 };
+

@@ -9,11 +9,13 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined,
     EyeOutlined,
-    CheckSquareFilled
+    CheckSquareFilled,
+    RotateRightOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { readableTime } from '../../utils/dateTimeFormater';
 import { REALTIME_ORDER, REALTIME_SHOP } from '../../endpoint';
+import { viewOrder } from '../../views/formpopup/Order';
 import { cancelOrder, changeStatusOrder, approvedOrder } from '../../views/formpopup/Order';
 
 const OrderStatus = ['Confirmed', 'Sent To Kitchen', 'Ready for Pickup', 'Delivered'];
@@ -252,7 +254,9 @@ const OrderList = (props: any) => {
             name: 'Xem đơn hàng',
             cell: (row: any) => (
                 <div>
-                    <Button type="primary" icon={<EyeOutlined />} onClick={() => history('/order/' + row.orderId)} />
+                    <Button type="primary" icon={<EyeOutlined />} 
+                        onClick={() =>viewOrder({customerName: row.customerName, orderTime: row.orderTime, status: row.status, totalPrice: row.totalPrice, itemsInCart: row.itemsInCart})} 
+                    />
                 </div>
             )
         }
