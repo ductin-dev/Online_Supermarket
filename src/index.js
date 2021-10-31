@@ -13,6 +13,7 @@ import App from './App';
 // style + assets
 import './assets/scss/style.scss';
 import 'antd/dist/antd.css';
+import './assets/scss/fixcssngu.css';
 
 // ===========================|| REACT DOM RENDER  ||=========================== //
 

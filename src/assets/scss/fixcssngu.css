@@ -1,0 +1,6 @@
+.ant-select-dropdown {
+    z-index: 2147483647;
+}
+.ant-select-selector {
+    height: 42px !important;
+}

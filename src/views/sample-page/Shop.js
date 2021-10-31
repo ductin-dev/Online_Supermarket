@@ -56,6 +56,29 @@ const Shop = () => {
     const viewItems = () => {
         setIsViewOrders(false);
     };
+    const pharseOrders = (arr) => {
+        let arrCanPick = [];
+        let arrCon = [];
+        let arrKitchen = [];
+        let arrBottom = [];
+        arr.forEach((element) => {
+            switch (element.status) {
+                case 'Ready for Pickup':
+                    arrCanPick.push(element);
+                    break;
+                case 'Confirmed':
+                    arrCon.push(element);
+                    break;
+                case 'Sent To Kitchen':
+                    arrKitchen.push(element);
+                    break;
+                default:
+                    arrBottom.push(element);
+                    break;
+            }
+        });
+        return arrCanPick.concat(arrCon).concat(arrKitchen).concat(arrBottom);
+    };
 
     return (
         <MainCard
@@ -103,7 +126,7 @@ const Shop = () => {
         >
             {isViewOrders ? (
                 <OrderList
-                    orders={orders}
+                    orders={pharseOrders(orders)}
                     shopId={shopId}
                     syncOrderList={() => {
                         setSyncOrders(!syncOrders);
