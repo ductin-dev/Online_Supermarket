@@ -9,7 +9,7 @@ export const getOrderHandler = (ordId: string, callback: (res: any) => void) => 
             callback(res.data);
         })
         .catch((err) => {
-            message.warning('Đã lỗi');
+            callback(err);
         });
 };
 

@@ -46,7 +46,7 @@ const ItemList = (props: any) => {
             cell: (row: any) => <div>{row.price}</div>
         },
         {
-            name: 'Thêm ->',
+            name: props.ordering ? 'Thêm ->' : 'Thao tác',
             cell: (row: any) =>
                 row.isActive ? (
                     <div>

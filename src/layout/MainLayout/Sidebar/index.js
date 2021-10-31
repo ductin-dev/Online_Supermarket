@@ -48,8 +48,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-// ===========================|| SIDEBAR DRAWER ||=========================== //
-
 const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
     const classes = useStyles();
     const theme = useTheme();
@@ -65,13 +63,11 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
             <BrowserView>
                 <PerfectScrollbar component="div" className={classes.ScrollHeight}>
                     <MenuList />
-                    <MenuCard />
                 </PerfectScrollbar>
             </BrowserView>
             <MobileView>
                 <Box sx={{ px: 2 }}>
                     <MenuList />
-                    <MenuCard />
                 </Box>
             </MobileView>
         </>

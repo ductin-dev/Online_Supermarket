@@ -9,12 +9,10 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined,
     EyeOutlined,
-    CheckSquareFilled,
-    RotateRightOutlined
+    CheckSquareFilled
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { readableTime } from '../../utils/dateTimeFormater';
-import { REALTIME_ORDER, REALTIME_SHOP } from '../../endpoint';
+import { REALTIME_SHOP } from '../../endpoint';
 import { viewOrder } from '../../views/formpopup/Order';
 import { cancelOrder, changeStatusOrder, approvedOrder } from '../../views/formpopup/Order';
 
@@ -38,15 +36,9 @@ const OrderList = (props: any) => {
                 .start()
                 .then(() => {
                     connection.on('NewOrder', (message: any) => {
-                        console.log('New: ' + message);
                         props.syncOrderList();
                     });
                     connection.on('CancelOrder', (message: any) => {
-                        console.log('Cancel: ' + message);
-                        props.syncOrderList();
-                    });
-                    connection.on('ChangeOrderStatus', (message: any) => {
-                        console.log('Change: ' + message);
                         props.syncOrderList();
                     });
                 })
@@ -89,8 +81,7 @@ const OrderList = (props: any) => {
             sortable: false,
             cell: (row: any) => (
                 <span style={{ minWidth: 150 }}>
-                    <span style={{ fontWeight: 800 }}>{row.customerName}</span>&nbsp;đã tạo vào:{' '}
-                    <span style={{ fontWeight: 800 }}>{readableTime(row.orderTime)}</span>
+                    <span style={{ fontWeight: 800 }}>{row.customerName}</span>
                 </span>
             )
         },
@@ -107,14 +98,32 @@ const OrderList = (props: any) => {
                             border: '2px solid #eeeeee',
                             padding: '5px',
                             borderRadius: 8,
-                            width: 100,
+                            width: 150,
                             textAlign: 'center',
-                            fontWeight: 800
+                            fontWeight: 800,
+                            margin: 'auto'
                         }}
                     >
                         <NotificationFilled />
                         &nbsp;
                         {row.deliveryInformation}
+                    </p>
+                ) : row.status === 'Sent To Kitchen' ? (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: 'darkorange',
+                            color: 'white',
+                            border: 'rgb(41,171,135)',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        In Kitchen...
                     </p>
                 ) : row.status === 'Ready for Pickup' ? (
                     <p
@@ -127,11 +136,12 @@ const OrderList = (props: any) => {
                             borderRadius: 8,
                             width: 150,
                             textAlign: 'center',
-                            fontWeight: 800
+                            fontWeight: 800,
+                            margin: 'auto'
                         }}
                     >
                         <CheckSquareFilled />
-                        &nbsp; Can pickup
+                        &nbsp;Can pickup
                     </p>
                 ) : row.status === 'Confirmed' ? (
                     <p
@@ -144,7 +154,8 @@ const OrderList = (props: any) => {
                             borderRadius: 8,
                             width: 150,
                             textAlign: 'center',
-                            fontWeight: 800
+                            fontWeight: 800,
+                            margin: 'auto'
                         }}
                     >
                         <CheckSquareFilled />
@@ -159,9 +170,10 @@ const OrderList = (props: any) => {
                             border: '2px solid #eeeeee',
                             padding: '5px',
                             borderRadius: 8,
-                            width: 100,
+                            width: 150,
                             textAlign: 'center',
-                            fontWeight: 800
+                            fontWeight: 800,
+                            margin: 'auto'
                         }}
                     >
                         <CloseCircleOutlined />
@@ -177,9 +189,10 @@ const OrderList = (props: any) => {
                             border: 'rgb(0,171,102)',
                             padding: '5px',
                             borderRadius: 8,
-                            width: 120,
+                            width: 150,
                             textAlign: 'center',
-                            fontWeight: 800
+                            fontWeight: 800,
+                            margin: 'auto'
                         }}
                     >
                         <CheckSquareFilled />
@@ -190,7 +203,7 @@ const OrderList = (props: any) => {
         },
         {
             name: 'Thành tiền',
-            cell: (row: any) => <div>{row.totalPrice}</div>
+            cell: (row: any) => <div>{parseFloat(row.totalPrice).toFixed(2)}</div>
         },
         {
             name: 'Đổi trạng thái',
@@ -243,7 +256,12 @@ const OrderList = (props: any) => {
                                 type="primary"
                                 style={{ margin: 2, fontWeight: 800, backgroundColor: 'red', border: 'none' }}
                                 icon={<CloseCircleOutlined />}
-                                onClick={() => cancelOrder(row, (res) => callBackSync('CancelOrder'))}
+                                onClick={() =>
+                                    cancelOrder(row, (res) => {
+                                        props.syncOrderList();
+                                        callBackSync('CancelOrder');
+                                    })
+                                }
                             />
                         </>
                     )}
@@ -254,8 +272,176 @@ const OrderList = (props: any) => {
             name: 'Xem đơn hàng',
             cell: (row: any) => (
                 <div>
-                    <Button type="primary" icon={<EyeOutlined />} 
-                        onClick={() =>viewOrder({customerName: row.customerName, orderTime: row.orderTime, status: row.status, totalPrice: row.totalPrice, itemsInCart: row.itemsInCart})} 
+                    <Button
+                        type="primary"
+                        icon={<EyeOutlined />}
+                        onClick={() =>
+                            viewOrder({
+                                orderId: row.orderId,
+                                customerName: row.customerName,
+                                orderTime: row.orderTime,
+                                status: row.status,
+                                totalPrice: row.totalPrice,
+                                itemsInCart: row.itemsInCart
+                            })
+                        }
+                    />
+                </div>
+            )
+        }
+    ];
+    const columns2 = [
+        {
+            name: 'Id',
+            sortable: false,
+            cell: (row: any) => <span>{row.orderId}</span>
+        },
+        {
+            name: 'Shop',
+            sortable: false,
+            cell: (row: any) => (
+                <span>
+                    <a
+                        onClick={() => {
+                            history('/shop/' + row.shopId);
+                        }}
+                        style={{ fontWeight: 800 }}
+                    >
+                        {row.shopId}
+                    </a>
+                </span>
+            )
+        },
+        {
+            name: 'Trạng thái',
+            sortable: false,
+            cell: (row: any) =>
+                row.status === null ? (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: '#f3f6f4',
+                            color: '#494949',
+                            border: '2px solid #eeeeee',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        <NotificationFilled />
+                        &nbsp;
+                        {row.deliveryInformation}
+                    </p>
+                ) : row.status === 'Sent To Kitchen' ? (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: 'darkorange',
+                            color: 'white',
+                            border: 'rgb(41,171,135)',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        In Kitchen...
+                    </p>
+                ) : row.status === 'Ready for Pickup' ? (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: 'darkorange',
+                            color: 'white',
+                            border: 'rgb(41,171,135)',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        <CheckSquareFilled />
+                        &nbsp;Can pickup
+                    </p>
+                ) : row.status === 'Confirmed' ? (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: '#1890ff',
+                            color: 'white',
+                            border: 'rgb(41,171,135)',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        <CheckSquareFilled />
+                        &nbsp;Confirmed
+                    </p>
+                ) : row.status === 'Cancelled' ? (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: '#f3f6f4',
+                            color: '#494949',
+                            border: '2px solid #eeeeee',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        <CloseCircleOutlined />
+                        &nbsp;
+                        {row.status}
+                    </p>
+                ) : (
+                    <p
+                        style={{
+                            fontSize: 10,
+                            backgroundColor: 'rgba(0,171,102,0.7)',
+                            color: 'white',
+                            border: 'rgb(0,171,102)',
+                            padding: '5px',
+                            borderRadius: 8,
+                            width: 150,
+                            textAlign: 'center',
+                            fontWeight: 800,
+                            margin: 'auto'
+                        }}
+                    >
+                        <CheckSquareFilled />
+                        &nbsp;
+                        {row.status}
+                    </p>
+                )
+        },
+        {
+            name: 'Thành tiền',
+            cell: (row: any) => <div>{parseFloat(row.totalPrice).toFixed(2)}</div>
+        },
+        {
+            name: 'Xem đơn hàng',
+            cell: (row: any) => (
+                <div>
+                    <Button
+                        type="primary"
+                        icon={<EyeOutlined />}
+                        onClick={() => {
+                            window.location.pathname = '/order/' + row.orderId;
+                        }}
                     />
                 </div>
             )
@@ -266,7 +452,7 @@ const OrderList = (props: any) => {
     return (
         <DataTable
             title={<span>Danh sách đơn hàng</span>}
-            columns={columns}
+            columns={props.myprofileView ? columns2 : columns}
             data={props.orders}
             pagination={true}
             paginationPerPage={5}

@@ -57,6 +57,7 @@ const Shop = () => {
         setIsViewOrders(false);
     };
     const pharseOrders = (arr) => {
+        let arrTop = [];
         let arrCanPick = [];
         let arrCon = [];
         let arrKitchen = [];
@@ -72,12 +73,15 @@ const Shop = () => {
                 case 'Sent To Kitchen':
                     arrKitchen.push(element);
                     break;
+                case null:
+                    arrTop.push(element);
+                    break;
                 default:
                     arrBottom.push(element);
                     break;
             }
         });
-        return arrCanPick.concat(arrCon).concat(arrKitchen).concat(arrBottom);
+        return arrTop.concat(arrCanPick).concat(arrCon).concat(arrKitchen).concat(arrBottom);
     };
 
     return (

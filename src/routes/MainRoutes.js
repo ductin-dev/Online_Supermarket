@@ -21,6 +21,7 @@ const Shop = Loadable(lazy(() => import('../views/sample-page/Shop')));
 const Profile = Loadable(lazy(() => import('../views/sample-page/Profile')));
 const Carts = Loadable(lazy(() => import('../views/sample-page/Carts')));
 const Cart = Loadable(lazy(() => import('../views/sample-page/Cart')));
+const Order = Loadable(lazy(() => import('../views/sample-page/Order')));
 // ===========================|| MAIN ROUTING ||=========================== //
 
 const MainRoutes = {
@@ -49,7 +50,7 @@ const MainRoutes = {
         },
         {
             path: '/order/:orderId',
-            element: <Cart />
+            element: <Order />
         },
         {
             path: '/myprofile',

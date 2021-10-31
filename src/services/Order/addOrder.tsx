@@ -17,6 +17,6 @@ export const addOrderHandler = (crtId: string, delInfor: string, callBackSync: (
             }
         })
         .catch((err) => {
-            message.warning('Đã lỗi');
+            message.warning('Đã lỗi: ' + err);
         });
 };

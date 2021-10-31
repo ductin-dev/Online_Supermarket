@@ -198,7 +198,9 @@ const Cart = () => {
                                                 }}
                                             >
                                                 Submit giỏ hàng&nbsp;|&nbsp;
-                                                <span style={{ fontWeight: 800, color: 'rgb(252,247,94)' }}>{cart.totalPrice}&nbsp;$</span>
+                                                <span style={{ fontWeight: 800, color: 'rgb(252,247,94)' }}>
+                                                    {parseFloat(cart.totalPrice).toFixed(2)}&nbsp;$
+                                                </span>
                                             </Button>
                                         </>
                                     }

@@ -98,7 +98,7 @@ const Profile = () => {
                 </>
             }
         >
-            <OrderList orders={orders} />
+            <OrderList orders={orders} myprofileView={true} />
         </MainCard>
     );
 };

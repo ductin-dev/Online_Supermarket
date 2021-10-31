@@ -90,7 +90,11 @@ const MainLayout = () => {
                     dispatch({ type: SET_CUSTOMER, currentCustomer: res });
                 });
             } else {
-                if (window.location.pathname !== '/') {
+                if (
+                    window.location.pathname !== '/' &&
+                    !window.location.pathname.includes('/order/') &&
+                    !window.location.pathname.includes('/shop/')
+                ) {
                     message.warning('Chưa đăng nhập');
                     history('/');
                 }
