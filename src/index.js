@@ -7,13 +7,12 @@ import { Provider } from 'react-redux';
 
 // project imports
 import { store } from './store';
-import * as serviceWorker from './serviceWorker';
 import App from './App';
 
 // style + assets
 import './assets/scss/style.scss';
 import 'antd/dist/antd.css';
-import './assets/scss/fixcssngu.css';
+import './assets/scss/fixcss.css';
 
 // ===========================|| REACT DOM RENDER  ||=========================== //
 
@@ -25,5 +24,3 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 );
-
-serviceWorker.unregister();

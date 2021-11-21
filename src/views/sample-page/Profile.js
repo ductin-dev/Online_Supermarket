@@ -35,6 +35,10 @@ const Profile = () => {
     useEffect(() => {
         loginCusHandler(localStorage.getItem('jwtFake'), (res) => {
             dispatch({ type: SET_CUSTOMER, currentCustomer: res });
+            if (res === 0) {
+                message.warning('Chưa đăng nhập');
+                history('/');
+            }
         });
     }, [syncUser]);
     useEffect(

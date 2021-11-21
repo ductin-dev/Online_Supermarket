@@ -73,8 +73,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-// ===========================|| MAIN LAYOUT ||=========================== //
-
 const MainLayout = () => {
     const history = useNavigate();
     const classes = useStyles();
@@ -147,7 +145,6 @@ const MainLayout = () => {
                 <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
                 <Outlet />
             </main>
-            <Customization />
         </div>
     );
 };

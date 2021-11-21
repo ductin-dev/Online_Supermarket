@@ -4,12 +4,15 @@ import { useParams } from 'react-router-dom';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 
 import { Typography } from '@material-ui/core';
-import { message, Descriptions, Table, Badge } from 'antd';
+import { message, Descriptions, Table, Badge, Steps, Popover } from 'antd';
 
 import MainCard from '../../ui-component/cards/MainCard';
 import { getOrderHandler } from '../../services/Order/getOrder';
 import { readableTime } from '../../utils/dateTimeFormater';
 import { REALTIME_ORDER, REALTIME_SHOP } from '../../endpoint';
+
+const { Step } = Steps;
+const customDot = (dot, { status, index }) => <Popover content={<span>{status}</span>}>{dot}</Popover>;
 
 const Order = () => {
     let { orderId } = useParams();
@@ -119,6 +122,11 @@ const Order = () => {
             title: 'Giá tiền',
             key: 'price',
             dataIndex: 'price'
+        },
+        {
+            title: 'Tổng',
+            key: 'total',
+            dataIndex: 'total'
         }
     ];
     const [data, setData] = useState([]);
@@ -131,7 +139,8 @@ const Order = () => {
                 itemName: item.itemName,
                 customerName: item.customerName,
                 amount: item.amount,
-                price: item.price
+                price: item.price,
+                total: parseFloat(item.amount * item.price).toFixed(2)
             });
         }
         setData(dataTmp);
@@ -141,17 +150,14 @@ const Order = () => {
         <MainCard
             title={
                 <Descriptions layout="horizontal" bordered>
-                    <Descriptions.Item label="Backend không chịu trả tên user nên hiện tạm cái id này" span={12}>
+                    <Descriptions.Item label="Define ID" span={12}>
                         {order.cusId + ' - ' + order.shopId}
                     </Descriptions.Item>
                     <Descriptions.Item label="Ngày đặt hàng" span={12}>
                         {readableTime(order.orderTime)}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Ngày xác nhận" span={12}>
-                        {readableTime(order.deliveTime)}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="Trạng thái" span={12}>
-                        <Badge status="processing" text={order.status == null ? 'Chờ xác nhận' : order.status} />
+                    <Descriptions.Item label="Ngày hoàn thành" span={12}>
+                        {order.status === 'Cancelled' ? <span style={{ color: 'red' }}>Đã huỷ</span> : readableTime(order.deliveTime)}
                     </Descriptions.Item>
                     <Descriptions.Item label="Thành tiền" span={12}>
                         {parseFloat(order.totalPrice).toFixed(2)}
@@ -160,6 +166,51 @@ const Order = () => {
             }
         >
             <Typography variant="body2">
+                {order.status == null ? (
+                    <Steps current={1} progressDot={customDot}>
+                        <Step title="Đã submit" description="Đã tạo đơn hàng" />
+                        <Step title="Chờ xác nhận" status="wait" />
+                    </Steps>
+                ) : order.status == 'Confirmed' ? (
+                    <Steps current={1} progressDot={customDot}>
+                        <Step title="Đã submit" description="Đã tạo đơn hàng" />
+                        <Step title="Đã xác nhận" />
+                        <Step title="In kitcheen" description="Đang chuẩn bị đơn hàng ở bếp" />
+                        <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" />
+                        <Step title="Thành công" />
+                    </Steps>
+                ) : order.status == 'Sent To Kitchen' ? (
+                    <Steps current={2} progressDot={customDot}>
+                        <Step title="Đã submit" description="Đã tạo đơn hàng" />
+                        <Step title="Đã xác nhận" />
+                        <Step title="In kitcheen" description="Đang chuẩn bị đơn hàng ở bếp" />
+                        <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" />
+                        <Step title="Thành công" />
+                    </Steps>
+                ) : order.status == 'Ready for Pickup' ? (
+                    <Steps current={3} progressDot={customDot}>
+                        <Step title="Đã submit" description="Đã tạo đơn hàng" />
+                        <Step title="Đã xác nhận" />
+                        <Step title="In kitcheen" description="Đang chuẩn bị đơn hàng ở bếp" />
+                        <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" />
+                        <Step title="Thành công" />
+                    </Steps>
+                ) : order.status == 'Delivered' ? (
+                    <Steps current={4} progressDot={customDot}>
+                        <Step title="Đã submit" description="Đã tạo đơn hàng" status="finish" />
+                        <Step title="Đã xác nhận" status="finish" />
+                        <Step title="In kitcheen" description="Đang chuẩn bị đơn hàng ở bếp" status="" />
+                        <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" status="finish" />
+                        <Step title="Thành công" description="Đã hoàn thành đơn hàng" status="finish" />
+                    </Steps>
+                ) : (
+                    <div>
+                        <Steps current={1} progressDot={customDot} style={{ width: '50%', margin: 'auto' }}>
+                            <Step title="Đã submit" description="Đã tạo đơn hàng" />
+                            <Step title="Đã huỷ" description="Đã huỷ đơn hàng" status="error" />
+                        </Steps>
+                    </div>
+                )}
                 <div>
                     <br />
                     <h4>Danh sách món hàng</h4>

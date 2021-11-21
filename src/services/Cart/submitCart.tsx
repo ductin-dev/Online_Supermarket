@@ -10,7 +10,7 @@ export const submitCartHandler = (itms: any, cusId: string, carId: string, callb
             cartId: carId
         })
         .then((res: any) => {
-            message.success('Đã submit đơn hàng');
+            message.success('Đã xác nhận đơn hàng');
             callback(res.data);
         })
         .catch((err) => {

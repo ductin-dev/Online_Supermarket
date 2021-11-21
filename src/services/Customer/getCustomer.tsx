@@ -20,6 +20,7 @@ export const loginCusHandler = (phone: string, callback: (res: any) => void) => 
         })
         .catch((err) => {
             message.warning('Đã lỗi');
+            callback(0);
         });
 };
 

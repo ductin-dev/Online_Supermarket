@@ -1,6 +1,7 @@
 import DataTable from 'react-data-table-component';
 import { useState, useEffect } from 'react';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from 'antd';
 import {
@@ -11,9 +12,8 @@ import {
     EyeOutlined,
     CheckSquareFilled
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+
 import { REALTIME_SHOP } from '../../endpoint';
-import { viewOrder } from '../../views/formpopup/Order';
 import { cancelOrder, changeStatusOrder, approvedOrder } from '../../views/formpopup/Order';
 
 const OrderStatus = ['Confirmed', 'Sent To Kitchen', 'Ready for Pickup', 'Delivered'];
@@ -275,16 +275,9 @@ const OrderList = (props: any) => {
                     <Button
                         type="primary"
                         icon={<EyeOutlined />}
-                        onClick={() =>
-                            viewOrder({
-                                orderId: row.orderId,
-                                customerName: row.customerName,
-                                orderTime: row.orderTime,
-                                status: row.status,
-                                totalPrice: row.totalPrice,
-                                itemsInCart: row.itemsInCart
-                            })
-                        }
+                        onClick={() => {
+                            window.location.pathname = '/order/' + row.orderId;
+                        }}
                     />
                 </div>
             )

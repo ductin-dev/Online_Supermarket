@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { makeStyles, useTheme } from '@material-ui/styles';
-import { Avatar, CardContent, Chip, ClickAwayListener, Grid, Paper, Popper, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    CardContent,
+    Chip,
+    ClickAwayListener,
+    Paper,
+    Popper,
+    Drawer,
+    Fab,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    IconButton,
+    Radio,
+    RadioGroup,
+    Slider,
+    Tooltip,
+    Typography
+} from '@material-ui/core';
+
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from '../../../../ui-component/cards/MainCard';
 import Transitions from '../../../../ui-component/extended/Transitions';
-import { Button, Divider, message } from 'antd';
+import { Button, message } from 'antd';
+import SubCard from '../../../../ui-component/cards/SubCard';
+import { SET_BORDER_RADIUS, SET_FONT_FAMILY } from '../../../../store/actions'; // THEME_RTL
+import { gridSpacing } from '../../../../store/constant';
 
 import { IconSettings } from '@tabler/icons';
 import { UserSwitchOutlined } from '@ant-design/icons';
@@ -88,13 +111,56 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-// ===========================|| PROFILE MENU ||=========================== //
+function valueText(value) {
+    return `${value}px`;
+}
 
 const ProfileSection = () => {
-    const classes = useStyles();
     const theme = useTheme();
+    const dispatch = useDispatch();
     const customization = useSelector((state) => state.customization);
+    const classes = useStyles();
 
+    let initialFont;
+    switch (customization.fontFamily) {
+        case `'Inter', sans-serif`:
+            initialFont = 'Inter';
+            break;
+        case `'Poppins', sans-serif`:
+            initialFont = 'Poppins';
+            break;
+        case `'Roboto', sans-serif`:
+        default:
+            initialFont = 'Roboto';
+            break;
+    }
+
+    //Border redux
+    const [borderRadius, setBorderRadius] = React.useState(customization.borderRadius);
+    useEffect(() => {
+        dispatch({ type: SET_BORDER_RADIUS, borderRadius });
+    }, [dispatch, borderRadius]);
+
+    //Font redux
+    const [fontFamily, setFontFamily] = React.useState(initialFont);
+    useEffect(() => {
+        let newFont;
+        switch (fontFamily) {
+            case 'Inter':
+                newFont = `'Inter', sans-serif`;
+                break;
+            case 'Poppins':
+                newFont = `'Poppins', sans-serif`;
+                break;
+            case 'Roboto':
+            default:
+                newFont = `'Roboto', sans-serif`;
+                break;
+        }
+        dispatch({ type: SET_FONT_FAMILY, fontFamily: newFont });
+    }, [dispatch, fontFamily]);
+
+    //RENDER
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 
@@ -162,8 +228,51 @@ const ProfileSection = () => {
                     <Transitions in={open} {...TransitionProps}>
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
-                                {customization.currentCustomer.name !== null ? (
-                                    <>
+                                <>
+                                    {customization.currentCustomer.name !== null ? (
+                                        <>
+                                            <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
+                                                <CardContent className={classes.cardContent}>
+                                                    <Grid container direction="column" spacing={0}>
+                                                        <Grid item className={classes.flex}>
+                                                            <Typography component="span" variant="h4" className={classes.name}>
+                                                                Xin chào,&nbsp;
+                                                            </Typography>
+                                                            <Typography variant="h4">{customization.currentCustomer.name}</Typography>
+                                                        </Grid>
+                                                        <Grid item>
+                                                            <Typography variant="subtitle2">
+                                                                Tên này sẽ được sử dụng khi bạn đặt hàng
+                                                            </Typography>
+                                                        </Grid>
+                                                    </Grid>
+                                                </CardContent>
+                                                <br></br>
+
+                                                <Button
+                                                    type="primary"
+                                                    icon={<UserSwitchOutlined />}
+                                                    style={{
+                                                        fontSize: 12,
+                                                        padding: '2px 15px 2px 15px',
+                                                        border: 'none',
+                                                        backgroundColor: 'red',
+                                                        borderRadius: 8,
+                                                        margin: 'auto',
+                                                        textAlign: 'center',
+                                                        width: '100%'
+                                                    }}
+                                                    onClick={() => {
+                                                        logoutCusHandler();
+                                                        message.success('Đã đăng xuất');
+                                                        window.location.href = '/';
+                                                    }}
+                                                >
+                                                    Đăng xuất
+                                                </Button>
+                                            </MainCard>
+                                        </>
+                                    ) : (
                                         <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                                             <CardContent className={classes.cardContent}>
                                                 <Grid container direction="column" spacing={0}>
@@ -171,71 +280,75 @@ const ProfileSection = () => {
                                                         <Typography component="span" variant="h4" className={classes.name}>
                                                             Xin chào,&nbsp;
                                                         </Typography>
-                                                        <Typography variant="h4">{customization.currentCustomer.name}</Typography>
-                                                    </Grid>
-                                                    <Grid item>
-                                                        <Typography variant="subtitle2">
-                                                            Tên này sẽ được sử dụng khi bạn đặt hàng
-                                                        </Typography>
+                                                        <Typography variant="h4">bạn chưa đăng nhập</Typography>
                                                     </Grid>
                                                 </Grid>
                                             </CardContent>
-                                            <br></br>
-
                                             <Button
                                                 type="primary"
                                                 icon={<UserSwitchOutlined />}
                                                 style={{
                                                     fontSize: 12,
                                                     padding: '2px 15px 2px 15px',
-                                                    border: 'none',
-                                                    backgroundColor: 'red',
                                                     borderRadius: 8,
                                                     margin: 'auto',
                                                     textAlign: 'center',
                                                     width: '100%'
                                                 }}
                                                 onClick={() => {
-                                                    logoutCusHandler();
-                                                    message.success('Đã đăng xuất');
                                                     window.location.href = '/';
                                                 }}
                                             >
-                                                Đăng xuất
+                                                Đăng nhập
                                             </Button>
                                         </MainCard>
-                                    </>
-                                ) : (
-                                    <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
-                                        <CardContent className={classes.cardContent}>
-                                            <Grid container direction="column" spacing={0}>
-                                                <Grid item className={classes.flex}>
-                                                    <Typography component="span" variant="h4" className={classes.name}>
-                                                        Xin chào,&nbsp;
-                                                    </Typography>
-                                                    <Typography variant="h4">bạn chưa đăng nhập</Typography>
-                                                </Grid>
+                                    )}
+                                    <PerfectScrollbar component="div">
+                                        <Grid container spacing={gridSpacing} sx={{ p: 3 }}>
+                                            <Grid item xs={12}>
+                                                {/* font family */}
+                                                <SubCard title="Chỉnh font (redux)">
+                                                    <FormControl>
+                                                        <RadioGroup
+                                                            aria-label="font-family"
+                                                            value={fontFamily}
+                                                            onChange={(e) => setFontFamily(e.target.value)}
+                                                            name="row-radio-buttons-group"
+                                                        >
+                                                            <FormControlLabel
+                                                                value="Poppins"
+                                                                control={<Radio />}
+                                                                label="Poppins"
+                                                                sx={{
+                                                                    '& .MuiSvgIcon-root': { fontSize: 28 },
+                                                                    '& .MuiFormControlLabel-label': { color: 'grey.900' }
+                                                                }}
+                                                            />
+                                                            <FormControlLabel
+                                                                value="Inter"
+                                                                control={<Radio />}
+                                                                label="Inter"
+                                                                sx={{
+                                                                    '& .MuiSvgIcon-root': { fontSize: 28 },
+                                                                    '& .MuiFormControlLabel-label': { color: 'grey.900' }
+                                                                }}
+                                                            />
+                                                            <FormControlLabel
+                                                                value="Roboto"
+                                                                control={<Radio />}
+                                                                label="Roboto"
+                                                                sx={{
+                                                                    '& .MuiSvgIcon-root': { fontSize: 28 },
+                                                                    '& .MuiFormControlLabel-label': { color: 'grey.900' }
+                                                                }}
+                                                            />
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                </SubCard>
                                             </Grid>
-                                        </CardContent>
-                                        <Button
-                                            type="primary"
-                                            icon={<UserSwitchOutlined />}
-                                            style={{
-                                                fontSize: 12,
-                                                padding: '2px 15px 2px 15px',
-                                                borderRadius: 8,
-                                                margin: 'auto',
-                                                textAlign: 'center',
-                                                width: '100%'
-                                            }}
-                                            onClick={() => {
-                                                window.location.href = '/';
-                                            }}
-                                        >
-                                            Đăng nhập
-                                        </Button>
-                                    </MainCard>
-                                )}
+                                        </Grid>
+                                    </PerfectScrollbar>
+                                </>
                             </ClickAwayListener>
                         </Paper>
                     </Transitions>

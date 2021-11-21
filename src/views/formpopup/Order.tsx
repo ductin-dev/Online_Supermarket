@@ -1,10 +1,9 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { Form, Button, Space, Alert, Select, Descriptions, Table, Badge } from 'antd';
+import { Form, Button, Space, Alert, Select } from 'antd';
 import { cancelOrderHandler, updateStatusOrderHandler } from '../../services/Order/changeStatusOrder';
 import { useState, useEffect } from 'react';
-import { TagsOutlined, CheckSquareOutlined, ShopOutlined, SendOutlined, ScheduleOutlined, EyeOutlined } from '@ant-design/icons';
-import { readableTime } from '../../utils/dateTimeFormater';
+import { TagsOutlined, CheckSquareOutlined, ShopOutlined, SendOutlined, ScheduleOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const MySwal = withReactContent(Swal);
@@ -116,75 +115,6 @@ const FormEdit = (props: any) => {
     );
 };
 
-const FormViewOrder = (props: any) => {
-    const columns = [
-        {
-            title: 'STT',
-            dataIndex: 'key',
-            key: 'key'
-        },
-        {
-            title: 'Tên món',
-            dataIndex: 'itemName',
-            key: 'itemName'
-        },
-        {
-            title: 'Số lượng',
-            dataIndex: 'amount',
-            key: 'amount'
-        },
-        {
-            title: 'Giá tiền',
-            key: 'price',
-            dataIndex: 'price'
-        }
-    ];
-
-    let data = new Array<Object>();
-    for (let i = 0; i < props.itemsInCart.length; i++) {
-        let item = props.itemsInCart[i];
-        data.push({
-            key: i + 1,
-            itemName: item.itemName,
-            amount: item.amount,
-            price: item.price
-        });
-    }
-    return (
-        <div>
-            <Descriptions layout="horizontal" bordered>
-                <Descriptions.Item label="Tên khách hàng" span={12}>
-                    {props.customerName}
-                </Descriptions.Item>
-                <Descriptions.Item label="Ngày đặt hàng" span={12}>
-                    {readableTime(props.orderTime)}
-                </Descriptions.Item>
-                <Descriptions.Item label="Trạng thái" span={12}>
-                    <Badge status="processing" text={props.status == null ? 'Chưa xác định' : props.status} />
-                    &nbsp;{' '}
-                    <Button
-                        type="primary"
-                        icon={<EyeOutlined />}
-                        onClick={() => {
-                            window.location.pathname = '/order/' + props.orderId;
-                        }}
-                    >
-                        Xem chi tiết
-                    </Button>
-                </Descriptions.Item>
-                <Descriptions.Item label="Thành tiền" span={12}>
-                    {parseFloat(props.totalPrice).toFixed(2)}
-                </Descriptions.Item>
-            </Descriptions>
-            <div>
-                <br />
-                <h4>Danh sách món hàng</h4>
-                <Table columns={columns} dataSource={data} />
-            </div>
-        </div>
-    );
-};
-
 export const changeStatusOrder = (order: any, callbackSync: (res: any) => void) => {
     MySwal.fire({
         title: (
@@ -234,24 +164,5 @@ export const approvedOrder = (order: any, callbackSync: (res: any) => void) => {
         denyButtonText: `Không`
     }).then((result) => {
         if (result.isConfirmed) updateStatusOrderHandler(order.orderId, 'Confirmed', order.customerId, order.shopId, callbackSync);
-    });
-};
-
-export const viewOrder = (props: any) => {
-    MySwal.fire({
-        title: <h5 style={{ color: 'forestgreen' }}>&nbsp;Thông tin đơn hàng</h5>,
-        width: 800,
-        html: (
-            <FormViewOrder
-                orderId={props.orderId}
-                customerName={props.customerName}
-                orderTime={props.orderTime}
-                status={props.status}
-                totalPrice={props.totalPrice}
-                itemsInCart={props.itemsInCart}
-            />
-        ),
-        showCloseButton: true,
-        showConfirmButton: false
     });
 };
