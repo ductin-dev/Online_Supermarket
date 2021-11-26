@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@material-ui/core';
-import { Form, Input, message, Button, Space } from 'antd';
+import { Form, Input, message, Button } from 'antd';
 
 import MainCard from '../../ui-component/cards/MainCard';
 import CartList from '../../ui-component/table/CartList';
@@ -33,7 +33,7 @@ const Carts = () => {
             message.warning('Chưa đăng nhập');
             history('/');
         }
-    }, []);
+    }, [customization.currentCustomer.name, history]);
 
     return (
         <MainCard

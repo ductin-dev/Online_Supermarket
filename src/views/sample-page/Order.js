@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 
 import { Typography } from '@material-ui/core';
-import { message, Descriptions, Table, Badge, Steps, Popover } from 'antd';
+import { message, Descriptions, Table, Steps, Popover } from 'antd';
 
 import MainCard from '../../ui-component/cards/MainCard';
 import { getOrderHandler } from '../../services/Order/getOrder';
@@ -31,7 +31,7 @@ const Order = () => {
     });
     useEffect(() => {
         getOrderHandler(orderId, callbackOrder);
-    }, []);
+    }, [callbackOrder, orderId]);
     const callbackOrder = (res) => {
         if (res?.shopId) {
             setOrder({
@@ -59,7 +59,7 @@ const Order = () => {
             .withAutomaticReconnect()
             .build();
         setConnection(connect);
-    }, []);
+    }, [orderId]);
     useEffect(() => {
         if (connection) {
             connection
@@ -71,7 +71,7 @@ const Order = () => {
                 })
                 .catch((error) => console.log('ERROR: ' + error));
         }
-    }, [connection]);
+    }, [connection, orderId]);
     const [connection2, setConnection2] = useState(null);
     useEffect(() => {
         const connect = new HubConnectionBuilder()
@@ -79,7 +79,7 @@ const Order = () => {
             .withAutomaticReconnect()
             .build();
         setConnection2(connect);
-    }, []);
+    }, [order.shopId]);
     useEffect(() => {
         if (connection2) {
             connection2
@@ -94,7 +94,7 @@ const Order = () => {
                 })
                 .catch((error) => console.log('ERROR: ' + error));
         }
-    }, [connection2]);
+    }, [connection2, orderId]);
 
     //ITEM TABLE
     const columns = [
@@ -171,7 +171,7 @@ const Order = () => {
                         <Step title="Đã submit" description="Đã tạo đơn hàng" />
                         <Step title="Chờ xác nhận" status="wait" />
                     </Steps>
-                ) : order.status == 'Confirmed' ? (
+                ) : order.status === 'Confirmed' ? (
                     <Steps current={1} progressDot={customDot}>
                         <Step title="Đã submit" description="Đã tạo đơn hàng" />
                         <Step title="Đã xác nhận" />
@@ -179,7 +179,7 @@ const Order = () => {
                         <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" />
                         <Step title="Thành công" />
                     </Steps>
-                ) : order.status == 'Sent To Kitchen' ? (
+                ) : order.status === 'Sent To Kitchen' ? (
                     <Steps current={2} progressDot={customDot}>
                         <Step title="Đã submit" description="Đã tạo đơn hàng" />
                         <Step title="Đã xác nhận" />
@@ -187,7 +187,7 @@ const Order = () => {
                         <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" />
                         <Step title="Thành công" />
                     </Steps>
-                ) : order.status == 'Ready for Pickup' ? (
+                ) : order.status === 'Ready for Pickup' ? (
                     <Steps current={3} progressDot={customDot}>
                         <Step title="Đã submit" description="Đã tạo đơn hàng" />
                         <Step title="Đã xác nhận" />
@@ -195,7 +195,7 @@ const Order = () => {
                         <Step title="Đã sẵn sàng" description="Đơn hàng đang chờ để mang đi" />
                         <Step title="Thành công" />
                     </Steps>
-                ) : order.status == 'Delivered' ? (
+                ) : order.status === 'Delivered' ? (
                     <Steps current={4} progressDot={customDot}>
                         <Step title="Đã submit" description="Đã tạo đơn hàng" status="finish" />
                         <Step title="Đã xác nhận" status="finish" />

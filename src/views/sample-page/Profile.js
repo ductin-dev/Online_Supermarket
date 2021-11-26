@@ -31,7 +31,7 @@ const Profile = () => {
                 history('/');
             }
         }
-    }, []);
+    }, [customization.currentCustomer.name, history]);
     useEffect(() => {
         loginCusHandler(localStorage.getItem('jwtFake'), (res) => {
             dispatch({ type: SET_CUSTOMER, currentCustomer: res });
@@ -40,7 +40,7 @@ const Profile = () => {
                 history('/');
             }
         });
-    }, [syncUser]);
+    }, [syncUser, dispatch, history]);
     useEffect(
         () => {
             setUser({

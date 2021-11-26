@@ -31,7 +31,7 @@ const Cart = () => {
     });
     useEffect(() => {
         getCartHandler(cartId, callbackCart);
-    }, []);
+    }, [cartId]);
     const callbackCart = (res) => {
         if (res.customerId) {
             setCart({
@@ -55,7 +55,7 @@ const Cart = () => {
             .withAutomaticReconnect()
             .build();
         setConnection(connect);
-    }, []);
+    }, [cartId]);
     useEffect(() => {
         if (connection) {
             connection
@@ -76,7 +76,7 @@ const Cart = () => {
                 })
                 .catch((error) => console.log('ERROR: ' + error));
         }
-    }, [connection]);
+    }, [connection, cartId]);
     const callBackSync = async (event) => {
         try {
             if (connection) await connection.send(event);
@@ -91,7 +91,7 @@ const Cart = () => {
             message.warning('Chưa đăng nhập');
             history('/');
         }
-    }, []);
+    }, [customization.currentCustomer.name, history]);
 
     //CHECK READY
     const [readyCount, setReadyCount] = useState(0);
@@ -107,7 +107,7 @@ const Cart = () => {
         });
         setReadyCount(readyCount);
         setReady(ready);
-    }, [cart]);
+    }, [cart, customization.currentCustomer.customerId]);
 
     return (
         <MainCard

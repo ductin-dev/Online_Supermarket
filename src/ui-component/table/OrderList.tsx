@@ -29,7 +29,7 @@ const OrderList = (props: any) => {
             .withAutomaticReconnect()
             .build();
         setConnection(connect);
-    }, []);
+    }, [props.shopId]);
     useEffect(() => {
         if (connection) {
             connection

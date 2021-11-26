@@ -13,7 +13,7 @@ const SamplePage = () => (
         <Typography variant="body2">
             Đây là dự án cuối khoá của chương trình đào tạo Udemy, bạn có thể tham khảo thêm những dự án và nghiên cứu khác, cũng như ủng hộ
             các bài blog của tôi tại{' '}
-            <a href="https://www.satdevelop.com" target="_blank">
+            <a href="https://www.satdevelop.com" target="_blank" rel="noreferrer">
                 www.satdevelop.com
             </a>
             <br></br>

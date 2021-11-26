@@ -27,7 +27,8 @@ const Shop = () => {
     });
     useEffect(() => {
         getShopHandler(shopId, callbackShop);
-    }, [syncShop]);
+    }, [syncShop, shopId]);
+
     const callbackShop = (res) => {
         if (res.name) {
             setShop({
@@ -49,7 +50,7 @@ const Shop = () => {
         getAllOrderByShopHandler(shopId, (res) => {
             setOrders(res.orders);
         });
-    }, [syncOrders]);
+    }, [syncOrders, shopId]);
     const viewOrders = () => {
         setIsViewOrders(true);
     };

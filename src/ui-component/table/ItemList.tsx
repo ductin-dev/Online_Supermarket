@@ -3,7 +3,7 @@ import { Button, Avatar } from 'antd';
 import { useSelector } from 'react-redux';
 
 import { addItem, deleteItem, editItem, viewItemImage } from '../../views/formpopup/Item';
-import { PlusCircleOutlined, EditFilled, MinusCircleOutlined, DeleteFilled, EyeFilled, UpCircleFilled } from '@ant-design/icons';
+import { PlusCircleOutlined, EditFilled, DeleteFilled, EyeFilled, UpCircleFilled } from '@ant-design/icons';
 import { activeItemHandler } from '../../services/Item/activeItem';
 import { addItemToCart } from '../../services/Cart/editCart';
 

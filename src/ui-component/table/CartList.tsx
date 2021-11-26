@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Button } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { readableTime } from '../../utils/dateTimeFormater';
 
 import { addCartHandler } from '../../services/Cart/addCart';
 
@@ -66,7 +65,7 @@ const CartList = (props: any) => {
                 <span>
                     Danh sách giỏ hàng của bạn | SĐT SHOP:{' '}
                     <span style={{ color: 'violet' }}>
-                        <a href={'/shop/' + props.carts[0]?.shopId} target="_blank" style={{ fontWeight: 800 }}>
+                        <a href={'/shop/' + props.carts[0]?.shopId} target="_blank" style={{ fontWeight: 800 }} rel="noreferrer">
                             {props.shopPhone}
                         </a>
                     </span>{' '}

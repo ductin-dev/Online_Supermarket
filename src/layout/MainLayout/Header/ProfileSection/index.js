@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { makeStyles, useTheme } from '@material-ui/styles';
@@ -9,16 +9,11 @@ import {
     ClickAwayListener,
     Paper,
     Popper,
-    Drawer,
-    Fab,
     FormControl,
     FormControlLabel,
     Grid,
-    IconButton,
     Radio,
     RadioGroup,
-    Slider,
-    Tooltip,
     Typography
 } from '@material-ui/core';
 
@@ -110,10 +105,6 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff'
     }
 }));
-
-function valueText(value) {
-    return `${value}px`;
-}
 
 const ProfileSection = () => {
     const theme = useTheme();
